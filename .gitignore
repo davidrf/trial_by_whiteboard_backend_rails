@@ -1,0 +1,10 @@
+/.bundle
+
+/log/*
+/tmp/*
+!/log/.keep
+!/tmp/.keep
+
+.env
+/coverage
+/spec/examples.txt
