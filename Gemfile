@@ -2,11 +2,13 @@ source 'https://rubygems.org'
 
 ruby '2.3.0'
 
+gem 'active_model_serializers', '~> 0.10.0'
 gem 'bcrypt', '~> 3.1.7'
 gem 'pg', '~> 0.18'
 gem 'puma', '~> 3.0'
 gem 'rack-cors'
 gem 'rails', '~> 5.0.0'
+gem 'versionist'
 
 group :development, :test do
   gem 'dotenv-rails'
