@@ -1,6 +1,6 @@
 class V1::QuestionsController < V1::ApplicationController
-  before_action :set_question, only: [:show, :update]
-  before_action :authorize_user, only: [:update]
+  before_action :set_question, only: [:show, :update, :destroy]
+  before_action :authorize_user, only: [:update, :destroy]
 
   def index
     @questions = Question.all
@@ -27,6 +27,11 @@ class V1::QuestionsController < V1::ApplicationController
     else
       render json: @question.errors, status: :unprocessable_entity
     end
+  end
+
+  def destroy
+    @question.destroy
+    head :no_content
   end
 
   private

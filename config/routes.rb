@@ -12,7 +12,7 @@ Rails.application.routes.draw do
     resources :questions, only: [:index, :show]
     resources :users, only: :create
     constraints AuthenticatedConstraint do
-      resources :questions, only: [:create, :update]
+      resources :questions, only: [:create, :update, :destroy]
     end
   end
 end

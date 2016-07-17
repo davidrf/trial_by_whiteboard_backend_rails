@@ -152,7 +152,7 @@ RSpec.describe "Questions controller" do
 
     context "valid access token" do
       context "valid information for question" do
-        it "returns JSON for question" do
+        it "returns no content" do
           patch(
             question_url(question),
             headers: authorization_headers(:v1, user.authentication_token),
@@ -229,6 +229,72 @@ RSpec.describe "Questions controller" do
           headers: authorization_headers(:v1, user.authentication_token),
           params: params,
           as: :json
+        )
+
+        expect(response).to have_http_status :unauthorized
+        expect(response.parsed_body["authentication_token"]).to eq "expired"
+      end
+    end
+  end
+
+  describe "#destroy" do
+    let!(:question) { create :question }
+    let(:user) { question.user }
+
+    context "valid access token" do
+      context "user is the one who created the question" do
+        it "returns no content" do
+          delete(
+            question_url(question),
+            headers: authorization_headers(:v1, user.authentication_token)
+          )
+
+          expect(response).to have_http_status :no_content
+        end
+      end
+
+      context "user is not the one who created the question" do
+        let(:another_user) { create :user }
+        it "returns unauthorized" do
+          delete(
+            question_url(question),
+            headers: authorization_headers(:v1, another_user.authentication_token)
+          )
+
+          expect(response).to have_http_status :unauthorized
+        end
+      end
+    end
+
+    context "no access token" do
+      it "returns unauthorized" do
+        delete(
+          question_url(question),
+          headers: accept_header(:v1)
+        )
+
+        expect(response).to have_http_status :unauthorized
+      end
+    end
+
+    context "invalid access token" do
+      it "returns unauthorized" do
+        delete(
+          question_url(question),
+          headers: authorization_headers(:v1, "")
+        )
+
+        expect(response).to have_http_status :unauthorized
+        expect(response.parsed_body["authentication_token"]).to eq "not found"
+      end
+    end
+
+    context "expired access token" do
+      let!(:user) { create :user, authentication_token_expires_at: Time.current }
+      it "returns unauthorized" do
+        delete(
+          question_url(question),
+          headers: authorization_headers(:v1, user.authentication_token)
         )
 
         expect(response).to have_http_status :unauthorized
