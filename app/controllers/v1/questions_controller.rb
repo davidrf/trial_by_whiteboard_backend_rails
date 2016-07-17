@@ -15,7 +15,7 @@ class V1::QuestionsController < V1::ApplicationController
     @question = Question.new(question_params)
     @question.user = current_user
     if @question.save
-      render json: @question, status: :created
+      render json: @question, status: :created, location: @question
     else
       render json: @question.errors, status: :unprocessable_entity
     end
