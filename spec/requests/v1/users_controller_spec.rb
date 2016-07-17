@@ -19,7 +19,7 @@ RSpec.describe "Users controller" do
       it "returns JSON for a user" do
         post(
           users_url,
-          headers: { "Accept" => Mime[:v1].to_s },
+          headers: accept_header(:v1),
           params: params,
           as: :json
         )
@@ -39,7 +39,7 @@ RSpec.describe "Users controller" do
       it "returns error messages" do
         post(
           users_url,
-          headers: { "Accept" => Mime[:v1].to_s },
+          headers: accept_header(:v1),
           params: params,
           as: :json
         )
@@ -55,7 +55,7 @@ RSpec.describe "Users controller" do
       it "returns error messages" do
         post(
           users_url,
-          headers: { "Accept" => Mime[:v1].to_s },
+          headers: accept_header(:v1),
           params: params,
           as: :json
         )
@@ -71,7 +71,7 @@ RSpec.describe "Users controller" do
       it "returns error messages" do
         post(
           users_url,
-          headers: { "Accept" => Mime[:v1].to_s },
+          headers: accept_header(:v1),
           params: params,
           as: :json
         )

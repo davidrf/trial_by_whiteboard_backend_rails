@@ -1,5 +1,8 @@
 class User < ApplicationRecord
+  has_many :questions
+
   has_secure_password
+
   validates :authentication_token, presence: true, uniqueness: true
   validates :authentication_token_expires_at, presence: true
   validates :email, presence: true, uniqueness: true
