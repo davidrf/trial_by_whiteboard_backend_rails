@@ -3,7 +3,7 @@ Rails.application.config.middleware.use Warden::Manager do |manager|
     [
       401,
       { "Content-Type" => "application/json" },
-      [{ authentication_token: env["warden"].message || "not specified" }.to_json]
+      [{ authentication_token: env["warden"].message }.to_json]
     ]
   }
 end
