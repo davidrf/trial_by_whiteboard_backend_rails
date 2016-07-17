@@ -53,6 +53,7 @@ RSpec.describe "Questions controller" do
           )
 
           expect(response).to have_http_status :created
+          expect(response.location).to be
           expect(response.parsed_body.dig("question", "id")).to be
           expect(response.parsed_body.dig("question", "body")).to eq question.body
           expect(response.parsed_body.dig("question", "title")).to eq question.title
