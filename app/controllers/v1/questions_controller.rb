@@ -4,6 +4,11 @@ class V1::QuestionsController < V1::ApplicationController
     render json: questions, status: :ok
   end
 
+  def show
+    question = Question.find(params[:id])
+    render json: question, status: :ok
+  end
+
   def create
     question = Question.new(question_params)
     question.user = current_user
