@@ -9,7 +9,7 @@ Rails.application.routes.draw do
     },
     defaults: { format: :v1 }
   ) do
-    resources :questions, only: :index
+    resources :questions, only: [:index, :show]
     resources :users, only: :create
     constraints AuthenticatedConstraint do
       resources :questions, only: :create
