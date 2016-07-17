@@ -1,6 +1,22 @@
 require "rails_helper"
 
 RSpec.describe "Questions controller" do
+  describe "#index" do
+    let!(:user) { create :user }
+    let!(:questions) { create_list :question, 2 }
+
+    it "shows a list of questions" do
+      get(questions_url, headers: accept_header(:v1))
+
+      expect(response).to have_http_status :ok
+      question_titles = response.parsed_body["questions"].map do |question|
+        question["title"]
+      end
+      expected_question_titles = questions.map(&:title)
+      expect(question_titles).to include(*expected_question_titles)
+    end
+  end
+
   describe "#create" do
     let!(:user) { create :user }
     let(:params) do
