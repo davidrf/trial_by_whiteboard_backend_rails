@@ -1,4 +1,9 @@
 class V1::QuestionsController < V1::ApplicationController
+  def index
+    questions = Question.all
+    render json: questions, status: :ok
+  end
+
   def create
     question = Question.new(question_params)
     question.user = current_user
