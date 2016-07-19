@@ -9,7 +9,6 @@ Rails.application.routes.draw do
     },
     defaults: { format: :v1 }
   ) do
-    resources :answers, only: :show
     resources :authentication_tokens, only: :create
     resources :questions, only: [:index, :show]
     resources :users, only: :create

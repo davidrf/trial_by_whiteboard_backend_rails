@@ -2,7 +2,7 @@ require "rails_helper"
 
 RSpec.describe User do
   subject { build :user }
-  it { should have_many :questions }
+  it { should have_many(:questions).dependent(:destroy) }
   it { should have_secure_password }
   it { should validate_presence_of :authentication_token }
   it { should validate_uniqueness_of :authentication_token }
