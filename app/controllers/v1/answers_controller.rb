@@ -1,7 +1,7 @@
 class V1::AnswersController < V1::ApplicationController
-  before_action :set_answer, only: [:update]
+  before_action :set_answer, only: [:update, :destroy]
   before_action :set_question, only: [:create]
-  before_action :authorize_user, only: [:update]
+  before_action :authorize_user, only: [:update, :destroy]
 
   def create
     @answer = @question.answers.new(answer_params)
@@ -19,6 +19,11 @@ class V1::AnswersController < V1::ApplicationController
     else
       render json: @answer.errors, status: :unprocessable_entity
     end
+  end
+
+  def destroy
+    @answer.destroy
+    head :no_content
   end
 
   private

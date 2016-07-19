@@ -191,4 +191,70 @@ RSpec.describe "Answers controller" do
       end
     end
   end
+
+  describe "#destroy" do
+    let!(:answer) { create :answer }
+    let(:user) { answer.user }
+
+    context "valid access token" do
+      context "user is the one who created the answer" do
+        it "returns no content" do
+          delete(
+            answer_url(answer),
+            headers: authorization_headers(:v1, user.authentication_token)
+          )
+
+          expect(response).to have_http_status :no_content
+        end
+      end
+
+      context "user is not the one who created the answer" do
+        let(:another_user) { create :user }
+        it "returns unauthorized" do
+          delete(
+            answer_url(answer),
+            headers: authorization_headers(:v1, another_user.authentication_token)
+          )
+
+          expect(response).to have_http_status :unauthorized
+        end
+      end
+    end
+
+    context "no access token" do
+      it "returns unauthorized" do
+        delete(
+          answer_url(answer),
+          headers: accept_header(:v1)
+        )
+
+        expect(response).to have_http_status :unauthorized
+      end
+    end
+
+    context "invalid access token" do
+      it "returns unauthorized" do
+        delete(
+          answer_url(answer),
+          headers: authorization_headers(:v1, "")
+        )
+
+        expect(response).to have_http_status :unauthorized
+        expect(response.parsed_body["authentication_token"]).to eq "not found"
+      end
+    end
+
+    context "expired access token" do
+      let!(:user) { create :user, authentication_token_expires_at: Time.current }
+      it "returns unauthorized" do
+        delete(
+          answer_url(answer),
+          headers: authorization_headers(:v1, user.authentication_token)
+        )
+
+        expect(response).to have_http_status :unauthorized
+        expect(response.parsed_body["authentication_token"]).to eq "expired"
+      end
+    end
+  end
 end
