@@ -11,6 +11,12 @@ class V1::AuthenticationTokensController < V1::ApplicationController
     end
   end
 
+  def destroy
+    current_user.authentication_token_expires_at = Time.current
+    current_user.save
+    head :no_content
+  end
+
   private
 
   def user_params
