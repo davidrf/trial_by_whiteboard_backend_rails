@@ -33,11 +33,11 @@ RSpec.describe User do
     end
 
     it "should set an authentication token" do
-      expect(new_user.authentication_token).to be
+      expect(new_user.authentication_token).to be_a String
     end
 
     it "should set an authentication token expiration" do
-      expect(new_user.authentication_token_expires_at).to be
+      expect(new_user.authentication_token_expires_at).to be_a ActiveSupport::TimeWithZone
     end
 
     it "should set a unique authentication token" do
