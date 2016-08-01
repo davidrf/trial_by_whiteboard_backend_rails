@@ -1,6 +1,41 @@
 require "rails_helper"
 
 RSpec.describe "Users controller" do
+  describe "#show" do
+    let!(:user) { create :user }
+    let!(:another_user) { create :user }
+
+    it "shows limited details of a user when no authorization headers are present" do
+      get(user_url(user), headers: accept_header(:v1))
+
+      expect(response).to have_http_status :ok
+      expect(response.parsed_body.dig("user", "id")).to eq user.id
+      expect(response.parsed_body.dig("user", "username")).to eq user.username
+    end
+
+    it "shows limited details when a user requests the details of another user" do
+      get(user_url(user), headers: authorization_headers(:v1, another_user.authentication_token))
+
+      expect(response).to have_http_status :ok
+      expect(response.parsed_body.dig("user", "id")).to eq user.id
+      expect(response.parsed_body.dig("user", "username")).to eq user.username
+    end
+
+    it "shows full details when a user requests their own details" do
+      get(
+        user_url(user),
+        headers: authorization_headers(:v1, user.authentication_token)
+      )
+
+      expect(response).to have_http_status :ok
+      expect(response.parsed_body.dig("user", "authenticationToken")).to eq user.authentication_token
+      expect(response.parsed_body.dig("user", "authenticationTokenExpiresAt")).to eq user.authentication_token_expires_at.to_json.delete("\"")
+      expect(response.parsed_body.dig("user", "id")).to eq user.id
+      expect(response.parsed_body.dig("user", "email")).to eq user.email
+      expect(response.parsed_body.dig("user", "username")).to eq user.username
+    end
+  end
+
   describe "#create" do
     let!(:existing_user) { create(:user) }
     let(:params) do

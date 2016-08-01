@@ -11,7 +11,7 @@ Rails.application.routes.draw do
   ) do
     resources :authentication_tokens, only: :create
     resources :questions, only: [:index, :show]
-    resources :users, only: :create
+    resources :users, only: [:show, :create]
     constraints AuthenticatedConstraint do
       resources :answers, only: [:update, :destroy]
       resource :authentication_tokens, only: :destroy

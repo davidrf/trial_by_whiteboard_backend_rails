@@ -19,7 +19,7 @@ RSpec.describe "Questions controller" do
   describe "#show" do
     let!(:question) { create :question }
 
-    it "shows a list of questions" do
+    it "shows the details of a question" do
       get(question_url(question), headers: accept_header(:v1))
 
       expect(response).to have_http_status :ok
