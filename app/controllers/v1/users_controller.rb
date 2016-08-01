@@ -1,4 +1,13 @@
 class V1::UsersController < V1::ApplicationController
+  def show
+    user = User.find(params[:id])
+    if current_user == user
+      render json: user, serializer: AuthenticationSerializer
+    else
+      render json: user
+    end
+  end
+
   def create
     user = User.new(user_params)
     user.set_new_unique_authentication_token

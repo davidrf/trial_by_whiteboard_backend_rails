@@ -4,6 +4,8 @@ class ApplicationController < ActionController::API
   end
 
   def current_user
-    @current_user ||= warden.authenticate if warden
+    if warden
+      @current_user ||= warden.authenticate(:token_authentication_strategy)
+    end
   end
 end
